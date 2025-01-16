@@ -1,0 +1,90 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Book {
+  """Unique identifier for the book"""
+  id: ID!
+
+  """Title of the book"""
+  title: String!
+
+  """Author of the book"""
+  isbn: String!
+
+  """Description of the book"""
+  description: String!
+
+  """Publication year of the book"""
+  publication_year: Int!
+
+  """Price of the book"""
+  price: Float!
+
+  """Stock of the book"""
+  stock: Int!
+
+  """Date when the book was created"""
+  created_at: DateTime!
+
+  """Date when the book was last updated"""
+  updated_at: DateTime!
+  totalBooks: Float!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Query {
+  books: [Book!]!
+  book(id: ID!): Book!
+}
+
+type Mutation {
+  createBook(createBookInput: CreateBookInput!): Book!
+  updateBook(updateBookInput: UpdateBookInput!): Book!
+  removeBook(id: ID!): Book!
+}
+
+input CreateBookInput {
+  """Title of the book"""
+  title: String!
+
+  """Author of the book"""
+  isbn: String!
+
+  """Description of the book"""
+  description: String!
+
+  """Publication year of the book"""
+  publication_year: Int!
+
+  """Price of the book"""
+  price: Float!
+
+  """Stock of the book"""
+  stock: Int!
+}
+
+input UpdateBookInput {
+  """Title of the book"""
+  title: String
+
+  """Author of the book"""
+  isbn: String
+
+  """Description of the book"""
+  description: String
+
+  """Publication year of the book"""
+  publication_year: Int
+
+  """Price of the book"""
+  price: Float
+
+  """Stock of the book"""
+  stock: Int
+  id: ID!
+}
