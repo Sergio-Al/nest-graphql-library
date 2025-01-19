@@ -10,6 +10,8 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UsersModule } from './users/users.module';
+import { AuthorsModule } from './authors/authors.module';
 
 @Module({
   imports: [
@@ -31,6 +33,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       autoLoadEntities: true,
     }),
     BooksModule,
+    UsersModule,
+    AuthorsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
