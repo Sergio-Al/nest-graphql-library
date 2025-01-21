@@ -61,6 +61,29 @@ export class BooksService {
     return book;
   }
 
+  // async addAuthorToBook(bookId: string, authorId: string): Promise<Book> {
+  //   const book = await this.booksRepository.findOne({
+  //     where: { id: bookId },
+  //     relations: ['authors'],
+  //   });
+
+  //   const author = await this.authorsRepository.findOneBy({ id: authorId });
+
+  //   if (!book.authors) {
+  //     book.authors = [];
+  //   }
+
+  //   book.authors.push(author);
+  //   return this.booksRepository.save(book);
+  // }
+
+  // async findBookWithAuthors(id: string): Promise<Book> {
+  //   return this.booksRepository.findOne({
+  //     where: { id },
+  //     relations: ['authors'],
+  //   });
+  // }
+
   async totalBooks(): Promise<number> {
     return this.booksRepository.count();
   }

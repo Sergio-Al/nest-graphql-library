@@ -6,10 +6,13 @@ import {
   GraphQLISODateTime,
   Float,
 } from '@nestjs/graphql';
+import { Author } from 'src/authors/entities/author.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -74,4 +77,22 @@ export class Book {
     description: 'Date when the book was last updated',
   })
   updated_at: Date;
+
+  @ManyToMany(() => Author, (author) => author.books)
+  @JoinTable({
+    name: 'book_authors',
+    joinColumn: {
+      name: 'book_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'author_id',
+      referencedColumnName: 'id',
+    },
+  })
+  @Field(() => [Author], {
+    description: 'Authors of the book',
+    defaultValue: [],
+  })
+  authors: Author[];
 }

@@ -2,6 +2,35 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Author {
+  """Example field (placeholder)"""
+  id: ID!
+
+  """name of the author"""
+  name: String!
+
+  """biography of the author"""
+  biography: String
+
+  """birth date of the author"""
+  birth_date: DateTime
+
+  """Nationality of the author"""
+  nationality: String
+
+  """Date when the author was created"""
+  created_at: DateTime!
+
+  """Books of the author"""
+  books: [Book!]!
+  totalAuthors: Float!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 type Book {
   """Unique identifier for the book"""
   id: ID!
@@ -29,13 +58,11 @@ type Book {
 
   """Date when the book was last updated"""
   updated_at: DateTime!
+
+  """Authors of the book"""
+  authors: [Author!]!
   totalBooks: Float!
 }
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
 
 type User {
   """Unique identifier for the user"""
@@ -61,18 +88,13 @@ type User {
   totalUsers: Float!
 }
 
-type Author {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
 type Query {
   books: [Book!]!
   book(id: ID!): Book!
   users: [User!]!
   user(id: ID!): User!
   authors: [Author!]!
-  author(id: Int!): Author!
+  author(id: ID!): Author!
 }
 
 type Mutation {
@@ -84,7 +106,7 @@ type Mutation {
   removeUser(id: ID!): User!
   createAuthor(createAuthorInput: CreateAuthorInput!): Author!
   updateAuthor(updateAuthorInput: UpdateAuthorInput!): Author!
-  removeAuthor(id: Int!): Author!
+  removeAuthor(id: ID!): Author!
 }
 
 input CreateBookInput {
@@ -158,12 +180,30 @@ input UpdateUserInput {
 }
 
 input CreateAuthorInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  """name of the author"""
+  name: String!
+
+  """biography of the author"""
+  biography: String
+
+  """Nationality of the author"""
+  nationality: String
+
+  """birth date of the author"""
+  birth_date: DateTime
 }
 
 input UpdateAuthorInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+  """name of the author"""
+  name: String
+
+  """biography of the author"""
+  biography: String
+
+  """Nationality of the author"""
+  nationality: String
+
+  """birth date of the author"""
+  birth_date: DateTime
+  id: ID!
 }
