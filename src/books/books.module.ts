@@ -9,5 +9,6 @@ import { CategoriesModule } from 'src/categories/categories.module';
 @Module({
   providers: [BooksResolver, BooksService],
   imports: [TypeOrmModule.forFeature([Book]), AuthorsModule, CategoriesModule],
+  exports: [BooksService],
 })
 export class BooksModule {}

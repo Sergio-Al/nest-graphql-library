@@ -5,10 +5,12 @@ import {
   ID,
   GraphQLISODateTime,
 } from '@nestjs/graphql';
+import { UserFavorite } from 'src/user-favorites/entities/user-favorite.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -62,4 +64,11 @@ export class User {
 
   @Column({ type: 'boolean', default: false })
   deleted: boolean;
+
+  @OneToMany(() => UserFavorite, (favorite) => favorite.user, { lazy: true })
+  @Field(() => [UserFavorite], {
+    description: 'List of user favorites',
+    defaultValue: [],
+  })
+  favorites: UserFavorite[];
 }

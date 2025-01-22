@@ -48,6 +48,40 @@ type Category {
   books: [Book!]!
 }
 
+type User {
+  """Unique identifier for the user"""
+  id: ID!
+
+  """Email of the user"""
+  email: String!
+
+  """First name of the user"""
+  first_name: String!
+
+  """Last name of the user"""
+  last_name: String!
+
+  """Role of the user"""
+  role: [String!]!
+
+  """Date when the user was created"""
+  created_at: DateTime!
+
+  """Date when the user was last updated"""
+  updated_at: DateTime!
+
+  """List of user favorites"""
+  favorites: [UserFavorite!]!
+  totalUsers: Float!
+}
+
+type UserFavorite {
+  id: ID!
+  user: User!
+  book: Book!
+  added_at: DateTime!
+}
+
 type Book {
   """Unique identifier for the book"""
   id: ID!
@@ -81,31 +115,15 @@ type Book {
 
   """Categories of the book"""
   categories: [Category!]!
+
+  """Users who favorited the book"""
+  favorited: [UserFavorite!]!
   totalBooks: Float!
 }
 
-type User {
-  """Unique identifier for the user"""
-  id: ID!
-
-  """Email of the user"""
-  email: String!
-
-  """First name of the user"""
-  first_name: String!
-
-  """Last name of the user"""
-  last_name: String!
-
-  """Role of the user"""
-  role: [String!]!
-
-  """Date when the user was created"""
-  created_at: DateTime!
-
-  """Date when the user was last updated"""
-  updated_at: DateTime!
-  totalUsers: Float!
+type Review {
+  """Example field (placeholder)"""
+  exampleField: Int!
 }
 
 type Query {
@@ -117,6 +135,8 @@ type Query {
   category(id: ID!): Category!
   users: [User!]!
   user(id: ID!): User!
+  reviews: [Review!]!
+  review(id: Int!): Review!
 }
 
 type Mutation {
@@ -134,6 +154,11 @@ type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   removeUser(id: ID!): User!
+  addUserFavorite(createUserFavoriteInput: CreateUserFavoriteInput!): UserFavorite!
+  removeUserFavorite(id: ID!): Boolean!
+  createReview(createReviewInput: CreateReviewInput!): Review!
+  updateReview(updateReviewInput: UpdateReviewInput!): Review!
+  removeReview(id: Int!): Review!
 }
 
 input CreateBookInput {
@@ -266,4 +291,20 @@ input UpdateUserInput {
   """Last name of the user"""
   last_name: String
   id: ID!
+}
+
+input CreateUserFavoriteInput {
+  userId: ID!
+  bookId: ID!
+}
+
+input CreateReviewInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateReviewInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
 }

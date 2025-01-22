@@ -13,6 +13,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { AuthorsModule } from './authors/authors.module';
 import { CategoriesModule } from './categories/categories.module';
+import { UserFavoritesModule } from './user-favorites/user-favorites.module';
+import { ReviewsModule } from './reviews/reviews.module';
 
 @Module({
   imports: [
@@ -37,6 +39,8 @@ import { CategoriesModule } from './categories/categories.module';
     UsersModule,
     AuthorsModule,
     CategoriesModule,
+    UserFavoritesModule,
+    ReviewsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

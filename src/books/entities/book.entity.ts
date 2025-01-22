@@ -8,12 +8,14 @@ import {
 } from '@nestjs/graphql';
 import { Author } from 'src/authors/entities/author.entity';
 import { Category } from 'src/categories/entities/category.entity';
+import { UserFavorite } from 'src/user-favorites/entities/user-favorite.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
   JoinTable,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -114,4 +116,11 @@ export class Book {
     defaultValue: [],
   })
   categories: Category[];
+
+  @OneToMany(() => UserFavorite, (favorite) => favorite.book, { lazy: true })
+  @Field(() => [UserFavorite], {
+    description: 'Users who favorited the book',
+    defaultValue: [],
+  })
+  favorited: UserFavorite[];
 }
