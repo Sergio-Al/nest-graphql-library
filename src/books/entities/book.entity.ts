@@ -7,6 +7,7 @@ import {
   Float,
 } from '@nestjs/graphql';
 import { Author } from 'src/authors/entities/author.entity';
+import { Category } from 'src/categories/entities/category.entity';
 import {
   Column,
   CreateDateColumn,
@@ -78,7 +79,7 @@ export class Book {
   })
   updated_at: Date;
 
-  @ManyToMany(() => Author, (author) => author.books)
+  @ManyToMany(() => Author, (author) => author.books, { lazy: true })
   @JoinTable({
     name: 'book_authors',
     joinColumn: {
@@ -95,4 +96,22 @@ export class Book {
     defaultValue: [],
   })
   authors: Author[];
+
+  @ManyToMany(() => Category, (category) => category.books, { lazy: true })
+  @JoinTable({
+    name: 'book_categories',
+    joinColumn: {
+      name: 'book_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'category_id',
+      referencedColumnName: 'id',
+    },
+  })
+  @Field(() => [Category], {
+    description: 'Categories of the book',
+    defaultValue: [],
+  })
+  categories: Category[];
 }

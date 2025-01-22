@@ -12,6 +12,7 @@ import { join } from 'path';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { AuthorsModule } from './authors/authors.module';
+import { CategoriesModule } from './categories/categories.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { AuthorsModule } from './authors/authors.module';
     BooksModule,
     UsersModule,
     AuthorsModule,
+    CategoriesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

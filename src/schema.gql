@@ -31,6 +31,23 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type Category {
+  """This is the primary id of the categories entity"""
+  id: ID!
+
+  """The name of the category"""
+  name: ID!
+
+  """The description of the category"""
+  description: String
+
+  """The date the category was created"""
+  created_at: DateTime!
+
+  """The books related to the category"""
+  books: [Book!]!
+}
+
 type Book {
   """Unique identifier for the book"""
   id: ID!
@@ -61,6 +78,9 @@ type Book {
 
   """Authors of the book"""
   authors: [Author!]!
+
+  """Categories of the book"""
+  categories: [Category!]!
   totalBooks: Float!
 }
 
@@ -91,22 +111,29 @@ type User {
 type Query {
   books: [Book!]!
   book(id: ID!): Book!
-  users: [User!]!
-  user(id: ID!): User!
   authors: [Author!]!
   author(id: ID!): Author!
+  categories: [Category!]!
+  category(id: ID!): Category!
+  users: [User!]!
+  user(id: ID!): User!
 }
 
 type Mutation {
   createBook(createBookInput: CreateBookInput!): Book!
   updateBook(updateBookInput: UpdateBookInput!): Book!
   removeBook(id: ID!): Book!
-  createUser(createUserInput: CreateUserInput!): User!
-  updateUser(updateUserInput: UpdateUserInput!): User!
-  removeUser(id: ID!): User!
+  addAuthorsToBook(input: AddBookAuthorInput!): Book!
+  addCategoriesToBook(input: AddBookCategoryInput!): Book!
   createAuthor(createAuthorInput: CreateAuthorInput!): Author!
   updateAuthor(updateAuthorInput: UpdateAuthorInput!): Author!
   removeAuthor(id: ID!): Author!
+  createCategory(createCategoryInput: CreateCategoryInput!): Category!
+  updateCategory(updateCategoryInput: UpdateCategoryInput!): Category!
+  removeCategory(id: ID!): Category!
+  createUser(createUserInput: CreateUserInput!): User!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+  removeUser(id: ID!): User!
 }
 
 input CreateBookInput {
@@ -150,33 +177,20 @@ input UpdateBookInput {
   id: ID!
 }
 
-input CreateUserInput {
-  """Email of the user"""
-  email: String!
+input AddBookAuthorInput {
+  """The id of the book"""
+  bookId: ID!
 
-  """Password of the user"""
-  password: String!
-
-  """First name of the user"""
-  first_name: String!
-
-  """Last name of the user"""
-  last_name: String!
+  """The id of the author"""
+  authorIds: [ID!]!
 }
 
-input UpdateUserInput {
-  """Email of the user"""
-  email: String
+input AddBookCategoryInput {
+  """The id of the book"""
+  bookId: ID!
 
-  """Password of the user"""
-  password: String
-
-  """First name of the user"""
-  first_name: String
-
-  """Last name of the user"""
-  last_name: String
-  id: ID!
+  """The id of the category"""
+  categoryIds: [ID!]!
 }
 
 input CreateAuthorInput {
@@ -205,5 +219,51 @@ input UpdateAuthorInput {
 
   """birth date of the author"""
   birth_date: DateTime
+  id: ID!
+}
+
+input CreateCategoryInput {
+  """The name of the category"""
+  name: String!
+
+  """The description of the category"""
+  description: String
+}
+
+input UpdateCategoryInput {
+  """The name of the category"""
+  name: String
+
+  """The description of the category"""
+  description: String
+  id: ID!
+}
+
+input CreateUserInput {
+  """Email of the user"""
+  email: String!
+
+  """Password of the user"""
+  password: String!
+
+  """First name of the user"""
+  first_name: String!
+
+  """Last name of the user"""
+  last_name: String!
+}
+
+input UpdateUserInput {
+  """Email of the user"""
+  email: String
+
+  """Password of the user"""
+  password: String
+
+  """First name of the user"""
+  first_name: String
+
+  """Last name of the user"""
+  last_name: String
   id: ID!
 }

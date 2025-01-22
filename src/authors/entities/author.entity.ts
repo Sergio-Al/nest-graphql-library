@@ -64,7 +64,7 @@ export class Author {
   })
   created_at: Date;
 
-  @ManyToMany(() => Book, (book) => book.authors)
+  @ManyToMany(() => Book, (book) => book.authors, { lazy: true })
   @Field(() => [Book], { description: 'Books of the author' })
   books: Book[];
 }

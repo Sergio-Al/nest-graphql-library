@@ -4,12 +4,18 @@ import { UpdateBookInput } from './dto/update-book.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Book } from './entities/book.entity';
 import { Repository } from 'typeorm';
+import { AddBookAuthorInput } from './dto/add-book-author.input';
+import { AuthorsService } from 'src/authors/authors.service';
+import { AddBookCategoryInput } from './dto/add-book-category.input';
+import { CategoriesService } from 'src/categories/categories.service';
 
 @Injectable()
 export class BooksService {
   constructor(
     @InjectRepository(Book)
     private readonly booksRepository: Repository<Book>,
+    private readonly authorsService: AuthorsService,
+    private readonly categoriesService: CategoriesService,
   ) {}
 
   async create(createBookInput: CreateBookInput): Promise<Book> {
@@ -24,10 +30,14 @@ export class BooksService {
     return queryBuilder.getMany();
   }
 
-  async findOne(id: string): Promise<Book> {
-    const book = await this.booksRepository.findOne({
-      where: { id, deleted: false },
-    });
+  async findOne(id: string, relations: string[] = []): Promise<Book> {
+    const findOptions = { where: { id, deleted: false } };
+
+    if (relations.length > 0) {
+      findOptions['relations'] = relations;
+    }
+
+    const book = await this.booksRepository.findOne(findOptions);
 
     if (!book) {
       throw new NotFoundException(`Book #${id} not found`);
@@ -61,28 +71,58 @@ export class BooksService {
     return book;
   }
 
-  // async addAuthorToBook(bookId: string, authorId: string): Promise<Book> {
-  //   const book = await this.booksRepository.findOne({
-  //     where: { id: bookId },
-  //     relations: ['authors'],
-  //   });
+  async addAuthorsToBook(input: AddBookAuthorInput): Promise<Book> {
+    const book = await this.findOne(input.bookId, ['authors']);
 
-  //   const author = await this.authorsRepository.findOneBy({ id: authorId });
+    if (!book.authors) {
+      book.authors = [];
+    }
 
-  //   if (!book.authors) {
-  //     book.authors = [];
-  //   }
+    const currentAuthors = await book.authors;
 
-  //   book.authors.push(author);
-  //   return this.booksRepository.save(book);
-  // }
+    const newAuthors = await this.authorsService.findAuthorsByIds(
+      input.authorIds,
+    );
 
-  // async findBookWithAuthors(id: string): Promise<Book> {
-  //   return this.booksRepository.findOne({
-  //     where: { id },
-  //     relations: ['authors'],
-  //   });
-  // }
+    if (newAuthors.length === 0) {
+      throw new NotFoundException('Authors not found');
+    }
+
+    const existingAuthorIds = currentAuthors.map((author) => author.id);
+    const uniqueNewAuthors = newAuthors.filter(
+      (author) => !existingAuthorIds.includes(author.id),
+    );
+
+    book.authors = [...currentAuthors, ...uniqueNewAuthors];
+
+    return this.booksRepository.save(book);
+  }
+
+  async addCategoriesToBook(input: AddBookCategoryInput): Promise<Book> {
+    const book = await this.findOne(input.bookId, ['categories']);
+
+    if (!book.categories) {
+      book.categories = [];
+    }
+
+    const currentCategories = await book.categories;
+    const newCategories = await this.categoriesService.findCategoriesByIds(
+      input.categoryIds,
+    );
+
+    if (newCategories.length === 0) {
+      throw new NotFoundException('Categories not found');
+    }
+
+    const existingCategoryIds = currentCategories.map(
+      (category) => category.id,
+    );
+    const uniqueNewCategories = newCategories.filter(
+      (category) => !existingCategoryIds.includes(category.id),
+    );
+    book.categories = [...currentCategories, ...uniqueNewCategories];
+    return this.booksRepository.save(book);
+  }
 
   async totalBooks(): Promise<number> {
     return this.booksRepository.count();

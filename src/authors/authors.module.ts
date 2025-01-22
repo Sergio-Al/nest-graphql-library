@@ -7,5 +7,6 @@ import { Author } from './entities/author.entity';
 @Module({
   providers: [AuthorsResolver, AuthorsService],
   imports: [TypeOrmModule.forFeature([Author])],
+  exports: [TypeOrmModule, AuthorsService],
 })
 export class AuthorsModule {}

@@ -3,7 +3,7 @@ import { CreateAuthorInput } from './dto/create-author.input';
 import { UpdateAuthorInput } from './dto/update-author.input';
 import { Author } from './entities/author.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Not, Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 
 @Injectable()
 export class AuthorsService {
@@ -26,6 +26,23 @@ export class AuthorsService {
       .where('author.deleted = :deleted', { deleted: false });
 
     const authors = await queryBuilder.getMany();
+
+    authors.forEach((author) => {
+      if (author.birth_date) {
+        author.birth_date = new Date(author.birth_date);
+      }
+    });
+
+    return authors;
+  }
+
+  async findAuthorsByIds(ids: string[]): Promise<Author[]> {
+    const authors = await this.authorsRepository.find({
+      where: {
+        id: In([...ids]),
+        deleted: false,
+      },
+    });
 
     authors.forEach((author) => {
       if (author.birth_date) {
