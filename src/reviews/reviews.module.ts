@@ -8,11 +8,7 @@ import { BooksModule } from 'src/books/books.module';
 
 @Module({
   providers: [ReviewsResolver, ReviewsService],
-  imports: [
-    TypeOrmModule.forFeature([Review]),
-    UsersModule,
-    forwardRef(() => BooksModule),
-  ],
+  imports: [TypeOrmModule.forFeature([Review]), UsersModule, BooksModule],
   exports: [TypeOrmModule, ReviewsService],
 })
 export class ReviewsModule {}

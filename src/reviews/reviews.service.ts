@@ -84,14 +84,6 @@ export class ReviewsService {
     });
   }
 
-  async activeReviewsByBookId(bookId: string): Promise<Review[]> {
-    return this.reviewsRepository
-      .createQueryBuilder('review')
-      .where('review.deleted = :deleted', { deleted: false })
-      .andWhere('review.bookId = :bookId', { bookId })
-      .getMany();
-  }
-
   private handleDBErrors(error: any) {
     this.logger.error(error.message, error.stack);
     if (error.code === '23503') {

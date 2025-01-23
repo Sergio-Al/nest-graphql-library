@@ -15,7 +15,6 @@ import { UpdateBookInput } from './dto/update-book.input';
 import { ParseUUIDPipe } from '@nestjs/common';
 import { AddBookAuthorInput } from './dto/add-book-author.input';
 import { AddBookCategoryInput } from './dto/add-book-category.input';
-import { Review } from 'src/reviews/entities/review.entity';
 
 @Resolver(() => Book)
 export class BooksResolver {
@@ -67,10 +66,5 @@ export class BooksResolver {
   @ResolveField(() => Number, { name: 'totalBooks' })
   totalBooks(): Promise<number> {
     return this.booksService.totalBooks();
-  }
-
-  @ResolveField(() => [Review], { name: 'activeReviews' })
-  activeReviews(@Parent() book: Book): Promise<Review[]> {
-    return this.booksService.activeReviews(book.id);
   }
 }
