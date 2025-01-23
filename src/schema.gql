@@ -231,7 +231,7 @@ type Mutation {
   createCategory(createCategoryInput: CreateCategoryInput!): Category!
   updateCategory(updateCategoryInput: UpdateCategoryInput!): Category!
   removeCategory(id: ID!): Category!
-  createUser(createUserInput: CreateUserInput!): User!
+  createUser(createUserInput: SignupInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   removeUser(id: ID!): User!
   addUserFavorite(createUserFavoriteInput: CreateUserFavoriteInput!): UserFavorite!
@@ -350,8 +350,7 @@ input UpdateCategoryInput {
   id: ID!
 }
 
-input CreateUserInput {
-  """Email of the user"""
+input SignupInput {
   email: String!
 
   """Password of the user"""

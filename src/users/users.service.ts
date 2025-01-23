@@ -5,11 +5,13 @@ import {
   Logger,
   NotFoundException,
 } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { SignupInput } from 'src/auth/dto/inputs/signup.input';
 
 @Injectable()
 export class UsersService {
@@ -20,8 +22,11 @@ export class UsersService {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  async create(createUserInput: CreateUserInput): Promise<User> {
-    const newUser = this.userRepository.create(createUserInput);
+  async create(signupInput: SignupInput): Promise<User> {
+    const newUser = this.userRepository.create({
+      ...signupInput,
+      password: bcrypt.hashSync(signupInput.password, 10),
+    });
     return await this.userRepository.save(newUser);
   }
 
@@ -40,6 +45,18 @@ export class UsersService {
 
     if (!user) {
       throw new NotFoundException(`User #${id} not found`);
+    }
+
+    return user;
+  }
+
+  async findByEmail(email: string): Promise<User> {
+    const user = await this.userRepository.findOneBy({
+      email,
+    });
+
+    if (!user) {
+      throw new NotFoundException(`User with email ${email} not found`);
     }
 
     return user;
