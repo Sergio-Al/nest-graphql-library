@@ -48,6 +48,13 @@ type Category {
   books: [Book!]!
 }
 
+type UserFavorite {
+  id: ID!
+  user: User!
+  book: Book!
+  added_at: DateTime!
+}
+
 type User {
   """Unique identifier for the user"""
   id: ID!
@@ -72,14 +79,36 @@ type User {
 
   """List of user favorites"""
   favorites: [UserFavorite!]!
+
+  """List of user reviews"""
+  reviews: [Review!]!
   totalUsers: Float!
 }
 
-type UserFavorite {
+type Review {
+  """Unique identifier for the review"""
   id: ID!
+
+  """Rating of the review"""
+  rating: Int!
+
+  """Content of the review"""
+  content: String!
+
+  """Flag to indicate if the review is active"""
+  deleted: Boolean!
+
+  """Date when the review was created"""
+  created_at: DateTime!
+
+  """Date when the review was last updated"""
+  updated_at: DateTime!
+
+  """User that created the review"""
   user: User!
+
+  """Book that was reviewed"""
   book: Book!
-  added_at: DateTime!
 }
 
 type Book {
@@ -118,12 +147,10 @@ type Book {
 
   """Users who favorited the book"""
   favorited: [UserFavorite!]!
-  totalBooks: Float!
-}
 
-type Review {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  """Reviews of the book"""
+  reviews: [Review!]!
+  totalBooks: Float!
 }
 
 type Query {
@@ -136,7 +163,7 @@ type Query {
   users: [User!]!
   user(id: ID!): User!
   reviews: [Review!]!
-  review(id: Int!): Review!
+  review(id: ID!): Review!
 }
 
 type Mutation {
@@ -158,7 +185,7 @@ type Mutation {
   removeUserFavorite(id: ID!): Boolean!
   createReview(createReviewInput: CreateReviewInput!): Review!
   updateReview(updateReviewInput: UpdateReviewInput!): Review!
-  removeReview(id: Int!): Review!
+  removeReview(id: ID!): Review!
 }
 
 input CreateBookInput {
@@ -299,12 +326,30 @@ input CreateUserFavoriteInput {
 }
 
 input CreateReviewInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  """Rating of the review"""
+  rating: Int!
+
+  """Content of the review"""
+  content: String!
+
+  """User that created the review"""
+  userId: ID!
+
+  """Book that is being reviewed"""
+  bookId: ID!
 }
 
 input UpdateReviewInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+  """Rating of the review"""
+  rating: Int
+
+  """Content of the review"""
+  content: String
+
+  """User that created the review"""
+  userId: ID
+
+  """Book that is being reviewed"""
+  bookId: ID
+  id: ID!
 }

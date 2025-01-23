@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  forwardRef,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateBookInput } from './dto/create-book.input';
 import { UpdateBookInput } from './dto/update-book.input';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -8,6 +13,8 @@ import { AddBookAuthorInput } from './dto/add-book-author.input';
 import { AuthorsService } from 'src/authors/authors.service';
 import { AddBookCategoryInput } from './dto/add-book-category.input';
 import { CategoriesService } from 'src/categories/categories.service';
+import { Review } from 'src/reviews/entities/review.entity';
+import { ReviewsService } from 'src/reviews/reviews.service';
 
 @Injectable()
 export class BooksService {
@@ -16,6 +23,7 @@ export class BooksService {
     private readonly booksRepository: Repository<Book>,
     private readonly authorsService: AuthorsService,
     private readonly categoriesService: CategoriesService,
+    private readonly reviewsService: ReviewsService,
   ) {}
 
   async create(createBookInput: CreateBookInput): Promise<Book> {
@@ -122,6 +130,10 @@ export class BooksService {
     );
     book.categories = [...currentCategories, ...uniqueNewCategories];
     return this.booksRepository.save(book);
+  }
+
+  async activeReviews(bookId: string): Promise<Review[]> {
+    return this.reviewsService.activeReviewsByBookId(bookId);
   }
 
   async totalBooks(): Promise<number> {
