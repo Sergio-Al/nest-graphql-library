@@ -48,6 +48,29 @@ type Category {
   books: [Book!]!
 }
 
+type Order {
+  """Unique identifier for the order"""
+  id: ID!
+
+  """User status"""
+  status: String!
+
+  """Total amount of the order"""
+  total_amount: Float!
+
+  """Date when the order was created"""
+  order_date: DateTime!
+
+  """Date when the order was last updated"""
+  updated_at: DateTime!
+
+  """User who placed the order"""
+  user: User!
+
+  """Flag to determine if the order was deleted"""
+  deleted: Boolean!
+}
+
 type UserFavorite {
   id: ID!
   user: User!
@@ -82,6 +105,9 @@ type User {
 
   """List of user reviews"""
   reviews: [Review!]!
+
+  """List of user orders"""
+  orders: [Order!]!
   totalUsers: Float!
 }
 
@@ -164,6 +190,8 @@ type Query {
   user(id: ID!): User!
   reviews: [Review!]!
   review(id: ID!): Review!
+  orders: [Order!]!
+  order(id: ID!): Order!
 }
 
 type Mutation {
@@ -186,6 +214,9 @@ type Mutation {
   createReview(createReviewInput: CreateReviewInput!): Review!
   updateReview(updateReviewInput: UpdateReviewInput!): Review!
   removeReview(id: ID!): Review!
+  createOrder(createOrderInput: CreateOrderInput!): Order!
+  updateOrder(updateOrderInput: UpdateOrderInput!): Order!
+  removeOrder(id: ID!): Order!
 }
 
 input CreateBookInput {
@@ -351,5 +382,35 @@ input UpdateReviewInput {
 
   """Book that is being reviewed"""
   bookId: ID
+  id: ID!
+}
+
+input CreateOrderInput {
+  """User status"""
+  status: ValidStatuses!
+
+  """Total amount of the order"""
+  total_amount: Float!
+
+  """User who placed the order"""
+  userId: String!
+}
+
+"""Valid order statuses"""
+enum ValidStatuses {
+  PENDING
+  COMPLETED
+  CANCELLED
+}
+
+input UpdateOrderInput {
+  """User status"""
+  status: ValidStatuses
+
+  """Total amount of the order"""
+  total_amount: Float
+
+  """User who placed the order"""
+  userId: String
   id: ID!
 }

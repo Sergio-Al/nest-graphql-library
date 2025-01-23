@@ -5,6 +5,7 @@ import {
   ID,
   GraphQLISODateTime,
 } from '@nestjs/graphql';
+import { Order } from 'src/orders/entities/order.entity';
 import { Review } from 'src/reviews/entities/review.entity';
 import { UserFavorite } from 'src/user-favorites/entities/user-favorite.entity';
 import {
@@ -79,4 +80,11 @@ export class User {
     defaultValue: [],
   })
   reviews: Review[];
+
+  @OneToMany(() => Order, (order) => order.user, { lazy: true })
+  @Field(() => [Order], {
+    description: 'List of user orders',
+    defaultValue: [],
+  })
+  orders: Order[];
 }
