@@ -16,6 +16,7 @@ import { CategoriesModule } from './categories/categories.module';
 import { UserFavoritesModule } from './user-favorites/user-favorites.module';
 import { ReviewsModule } from './reviews/reviews.module';
 import { OrdersModule } from './orders/orders.module';
+import { OrderItemsModule } from './order-items/order-items.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { OrdersModule } from './orders/orders.module';
     UserFavoritesModule,
     ReviewsModule,
     OrdersModule,
+    OrderItemsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

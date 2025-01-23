@@ -1,5 +1,11 @@
 import { InputType, Int, Field, Float } from '@nestjs/graphql';
-import { IsNotEmpty, isNotEmpty, IsUUID } from 'class-validator';
+import {
+  IsEmpty,
+  IsNotEmpty,
+  isNotEmpty,
+  IsOptional,
+  IsUUID,
+} from 'class-validator';
 import { ValidStatuses } from '../enums/valid-statuses.enum';
 
 @InputType()
@@ -8,9 +14,13 @@ export class CreateOrderInput {
   @IsNotEmpty()
   status: string;
 
-  @Field(() => Float, { description: 'Total amount of the order' })
-  @IsNotEmpty()
-  total_amount: number;
+  @Field(() => Float, {
+    description: 'Total amount of the order',
+    defaultValue: 0,
+    nullable: true,
+  })
+  @IsOptional()
+  total_amount?: number;
 
   @Field(() => String, { description: 'User who placed the order' })
   @IsUUID()

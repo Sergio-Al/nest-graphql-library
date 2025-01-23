@@ -8,6 +8,7 @@ import {
 } from '@nestjs/graphql';
 import { Author } from 'src/authors/entities/author.entity';
 import { Category } from 'src/categories/entities/category.entity';
+import { OrderItem } from 'src/order-items/entities/order-item.entity';
 import { Review } from 'src/reviews/entities/review.entity';
 import { UserFavorite } from 'src/user-favorites/entities/user-favorite.entity';
 import {
@@ -131,4 +132,11 @@ export class Book {
     defaultValue: [],
   })
   reviews: Review[];
+
+  @OneToMany(() => OrderItem, (orderItem) => orderItem.book, { lazy: true })
+  @Field(() => [OrderItem], {
+    description: 'Order items of the book',
+    defaultValue: [],
+  })
+  orderItems: OrderItem[];
 }

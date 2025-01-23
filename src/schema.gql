@@ -48,27 +48,30 @@ type Category {
   books: [Book!]!
 }
 
-type Order {
-  """Unique identifier for the order"""
+type Review {
+  """Unique identifier for the review"""
   id: ID!
 
-  """User status"""
-  status: String!
+  """Rating of the review"""
+  rating: Int!
 
-  """Total amount of the order"""
-  total_amount: Float!
+  """Content of the review"""
+  content: String!
 
-  """Date when the order was created"""
-  order_date: DateTime!
+  """Flag to indicate if the review is active"""
+  deleted: Boolean!
 
-  """Date when the order was last updated"""
+  """Date when the review was created"""
+  created_at: DateTime!
+
+  """Date when the review was last updated"""
   updated_at: DateTime!
 
-  """User who placed the order"""
+  """User that created the review"""
   user: User!
 
-  """Flag to determine if the order was deleted"""
-  deleted: Boolean!
+  """Book that was reviewed"""
+  book: Book!
 }
 
 type UserFavorite {
@@ -111,29 +114,46 @@ type User {
   totalUsers: Float!
 }
 
-type Review {
-  """Unique identifier for the review"""
+type Order {
+  """Unique identifier for the order"""
   id: ID!
 
-  """Rating of the review"""
-  rating: Int!
+  """User status"""
+  status: String!
 
-  """Content of the review"""
-  content: String!
+  """Total amount of the order"""
+  total_amount: Float
 
-  """Flag to indicate if the review is active"""
-  deleted: Boolean!
+  """Date when the order was created"""
+  order_date: DateTime!
 
-  """Date when the review was created"""
-  created_at: DateTime!
-
-  """Date when the review was last updated"""
+  """Date when the order was last updated"""
   updated_at: DateTime!
 
-  """User that created the review"""
+  """User who placed the order"""
   user: User!
 
-  """Book that was reviewed"""
+  """Flag to determine if the order was deleted"""
+  deleted: Boolean!
+
+  """Items in the order"""
+  orderItems: [OrderItem!]!
+}
+
+type OrderItem {
+  """Unique identifier for the order item"""
+  id: ID!
+
+  """Quantity of the book"""
+  quantity: Int!
+
+  """Unit price of the book"""
+  unit_price: Float!
+
+  """Order to which the item belongs"""
+  order: Order!
+
+  """Book in the order item"""
   book: Book!
 }
 
@@ -176,6 +196,9 @@ type Book {
 
   """Reviews of the book"""
   reviews: [Review!]!
+
+  """Order items of the book"""
+  orderItems: [OrderItem!]!
   totalBooks: Float!
 }
 
@@ -192,6 +215,8 @@ type Query {
   review(id: ID!): Review!
   orders: [Order!]!
   order(id: ID!): Order!
+  orderItems: [OrderItem!]!
+  orderItem(id: ID!): OrderItem!
 }
 
 type Mutation {
@@ -217,6 +242,9 @@ type Mutation {
   createOrder(createOrderInput: CreateOrderInput!): Order!
   updateOrder(updateOrderInput: UpdateOrderInput!): Order!
   removeOrder(id: ID!): Order!
+  createOrderItem(createOrderItemInput: CreateOrderItemInput!): OrderItem!
+  updateOrderItem(updateOrderItemInput: UpdateOrderItemInput!): OrderItem!
+  removeOrderItem(id: ID!): OrderItem!
 }
 
 input CreateBookInput {
@@ -390,7 +418,7 @@ input CreateOrderInput {
   status: ValidStatuses!
 
   """Total amount of the order"""
-  total_amount: Float!
+  total_amount: Float = 0
 
   """User who placed the order"""
   userId: String!
@@ -408,9 +436,38 @@ input UpdateOrderInput {
   status: ValidStatuses
 
   """Total amount of the order"""
-  total_amount: Float
+  total_amount: Float = 0
 
   """User who placed the order"""
   userId: String
+  id: ID!
+}
+
+input CreateOrderItemInput {
+  """Quantity of the book"""
+  quantity: Int!
+
+  """Unit price of the book"""
+  unit_price: Float
+
+  """Order to which the item belongs"""
+  order_id: ID!
+
+  """Book in the order item"""
+  book_id: ID!
+}
+
+input UpdateOrderItemInput {
+  """Quantity of the book"""
+  quantity: Int
+
+  """Unit price of the book"""
+  unit_price: Float
+
+  """Order to which the item belongs"""
+  order_id: ID
+
+  """Book in the order item"""
+  book_id: ID
   id: ID!
 }

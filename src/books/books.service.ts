@@ -129,6 +129,12 @@ export class BooksService {
     return this.booksRepository.save(book);
   }
 
+  // async updateStock(bookId: string, newStock: number): Promise<Book> {
+  //   const book = await this.findOne(bookId);
+  //   book.stock = newStock;
+  //   return this.booksRepository.save(book);
+  // }
+
   async totalBooks(): Promise<number> {
     return this.booksRepository.count();
   }
