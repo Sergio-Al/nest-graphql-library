@@ -202,6 +202,11 @@ type Book {
   totalBooks: Float!
 }
 
+type AuthResponse {
+  token: String!
+  user: User!
+}
+
 type Query {
   books: [Book!]!
   book(id: ID!): Book!
@@ -217,6 +222,7 @@ type Query {
   order(id: ID!): Order!
   orderItems: [OrderItem!]!
   orderItem(id: ID!): OrderItem!
+  revalidate: AuthResponse!
 }
 
 type Mutation {
@@ -245,6 +251,8 @@ type Mutation {
   createOrderItem(createOrderItemInput: CreateOrderItemInput!): OrderItem!
   updateOrderItem(updateOrderItemInput: UpdateOrderItemInput!): OrderItem!
   removeOrderItem(id: ID!): OrderItem!
+  signup(signupInput: SignupInput!): AuthResponse!
+  login(loginInput: LoginInput!): AuthResponse!
 }
 
 input CreateBookInput {
@@ -469,4 +477,12 @@ input UpdateOrderItemInput {
   """Book in the order item"""
   book_id: ID
   id: ID!
+}
+
+input LoginInput {
+  """Email of the user"""
+  email: String!
+
+  """Password of the user"""
+  password: String!
 }

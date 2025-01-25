@@ -3,9 +3,11 @@ import { ReviewsService } from './reviews.service';
 import { Review } from './entities/review.entity';
 import { CreateReviewInput } from './dto/create-review.input';
 import { UpdateReviewInput } from './dto/update-review.input';
-import { ParseUUIDPipe } from '@nestjs/common';
+import { ParseUUIDPipe, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @Resolver(() => Review)
+@UseGuards(JwtAuthGuard)
 export class ReviewsResolver {
   constructor(private readonly reviewsService: ReviewsService) {}
 

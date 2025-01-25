@@ -11,10 +11,12 @@ import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
-import { ParseUUIDPipe } from '@nestjs/common';
+import { ParseUUIDPipe, UseGuards } from '@nestjs/common';
 import { SignupInput } from 'src/auth/dto/inputs/signup.input';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @Resolver(() => User)
+@UseGuards(JwtAuthGuard)
 export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
 

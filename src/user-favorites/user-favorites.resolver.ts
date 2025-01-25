@@ -2,9 +2,11 @@ import { Resolver, Query, Mutation, Args, Int, ID } from '@nestjs/graphql';
 import { UserFavoritesService } from './user-favorites.service';
 import { UserFavorite } from './entities/user-favorite.entity';
 import { CreateUserFavoriteInput } from './dto/create-user-favorite.input';
-import { ParseUUIDPipe } from '@nestjs/common';
+import { ParseUUIDPipe, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @Resolver(() => UserFavorite)
+@UseGuards(JwtAuthGuard)
 export class UserFavoritesResolver {
   constructor(private readonly userFavoritesService: UserFavoritesService) {}
 

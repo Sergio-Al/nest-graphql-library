@@ -11,9 +11,11 @@ import { AuthorsService } from './authors.service';
 import { Author } from './entities/author.entity';
 import { CreateAuthorInput } from './dto/create-author.input';
 import { UpdateAuthorInput } from './dto/update-author.input';
-import { ParseUUIDPipe } from '@nestjs/common';
+import { ParseUUIDPipe, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @Resolver(() => Author)
+@UseGuards(JwtAuthGuard)
 export class AuthorsResolver {
   constructor(private readonly authorsService: AuthorsService) {}
 

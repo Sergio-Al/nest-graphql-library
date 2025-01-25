@@ -3,9 +3,11 @@ import { OrdersService } from './orders.service';
 import { Order } from './entities/order.entity';
 import { CreateOrderInput } from './dto/create-order.input';
 import { UpdateOrderInput } from './dto/update-order.input';
-import { ParseUUIDPipe } from '@nestjs/common';
+import { ParseUUIDPipe, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @Resolver(() => Order)
+@UseGuards(JwtAuthGuard)
 export class OrdersResolver {
   constructor(private readonly ordersService: OrdersService) {}
 

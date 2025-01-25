@@ -12,11 +12,13 @@ import { BooksService } from './books.service';
 import { Book } from './entities/book.entity';
 import { CreateBookInput } from './dto/create-book.input';
 import { UpdateBookInput } from './dto/update-book.input';
-import { ParseUUIDPipe } from '@nestjs/common';
+import { ParseUUIDPipe, UseGuards } from '@nestjs/common';
 import { AddBookAuthorInput } from './dto/add-book-author.input';
 import { AddBookCategoryInput } from './dto/add-book-category.input';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @Resolver(() => Book)
+@UseGuards(JwtAuthGuard)
 export class BooksResolver {
   constructor(private readonly booksService: BooksService) {}
 

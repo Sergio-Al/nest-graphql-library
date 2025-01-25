@@ -3,9 +3,11 @@ import { CategoriesService } from './categories.service';
 import { Category } from './entities/category.entity';
 import { CreateCategoryInput } from './dto/create-category.input';
 import { UpdateCategoryInput } from './dto/update-category.input';
-import { ParseUUIDPipe } from '@nestjs/common';
+import { ParseUUIDPipe, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @Resolver(() => Category)
+@UseGuards(JwtAuthGuard)
 export class CategoriesResolver {
   constructor(private readonly categoriesService: CategoriesService) {}
 
