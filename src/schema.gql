@@ -23,6 +23,8 @@ type Author {
 
   """Books of the author"""
   books: [Book!]!
+
+  """Total number of authors"""
   totalAuthors: Float!
 }
 
@@ -199,6 +201,8 @@ type Book {
 
   """Order items of the book"""
   orderItems: [OrderItem!]!
+
+  """Total number of books"""
   totalBooks: Float!
 }
 
@@ -226,13 +230,28 @@ type Query {
 }
 
 type Mutation {
+  """Create a new book, requires a Admin Role"""
   createBook(createBookInput: CreateBookInput!): Book!
+
+  """Update a book, requires a Admin Role"""
   updateBook(updateBookInput: UpdateBookInput!): Book!
+
+  """Remove a book, requires a Admin Role"""
   removeBook(id: ID!): Book!
+
+  """Add authors to a book, requires a Admin Role"""
   addAuthorsToBook(input: AddBookAuthorInput!): Book!
+
+  """Add categories to a book, requires a Admin Role"""
   addCategoriesToBook(input: AddBookCategoryInput!): Book!
+
+  """Create a new author, requires a Admin Role"""
   createAuthor(createAuthorInput: CreateAuthorInput!): Author!
+
+  """Update an author, requires a Admin Role"""
   updateAuthor(updateAuthorInput: UpdateAuthorInput!): Author!
+
+  """Remove an author, requires a Admin Role"""
   removeAuthor(id: ID!): Author!
   createCategory(createCategoryInput: CreateCategoryInput!): Category!
   updateCategory(updateCategoryInput: UpdateCategoryInput!): Category!
