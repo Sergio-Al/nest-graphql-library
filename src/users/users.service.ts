@@ -12,6 +12,7 @@ import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { SignupInput } from 'src/auth/dto/inputs/signup.input';
+import { UpdateRoleInput } from './dto/update-role.input';
 
 @Injectable()
 export class UsersService {
@@ -77,6 +78,18 @@ export class UsersService {
     } catch (error) {
       this.handleDBErrors(error);
     }
+  }
+
+  async updateUserRole(
+    updateRoleInput: UpdateRoleInput,
+    currentUser: User,
+  ): Promise<User> {
+    const { id, roles } = updateRoleInput;
+    const user = await this.findOne(id);
+
+    console.log(currentUser);
+    user.role = roles;
+    return await this.userRepository.save(user);
   }
 
   async totalUsers(): Promise<number> {

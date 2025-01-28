@@ -9,11 +9,13 @@ import {
 } from '@nestjs/graphql';
 import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
-import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { ParseUUIDPipe, UseGuards } from '@nestjs/common';
 import { SignupInput } from 'src/auth/dto/inputs/signup.input';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { UpdateRoleInput } from './dto/update-role.input';
+import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
+import { ValidRoles } from 'src/auth/enums/valid-roles.enum';
 
 @Resolver(() => User)
 @UseGuards(JwtAuthGuard)
@@ -38,6 +40,17 @@ export class UsersResolver {
   @Mutation(() => User)
   updateUser(@Args('updateUserInput') updateUserInput: UpdateUserInput) {
     return this.usersService.update(updateUserInput.id, updateUserInput);
+  }
+
+  @Mutation(() => User, {
+    name: 'updateUserRole',
+    description: `Roles allowed: ${ValidRoles.superAdmin} This mutation is used to update the role of a user`,
+  })
+  updateUserRole(
+    @CurrentUser([ValidRoles.superAdmin]) user: User,
+    @Args('updateInput') updateRoleInput: UpdateRoleInput,
+  ) {
+    return this.usersService.updateUserRole(updateRoleInput, user);
   }
 
   @Mutation(() => User)

@@ -1,13 +1,15 @@
 import {
   createParamDecorator,
   ExecutionContext,
+  ForbiddenException,
   InternalServerErrorException,
 } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { User } from 'src/users/entities/user.entity';
+import { ValidRoles } from '../enums/valid-roles.enum';
 
 export const CurrentUser = createParamDecorator(
-  (data, context: ExecutionContext) => {
+  (roles: ValidRoles[] = [], context: ExecutionContext) => {
     const ctx = GqlExecutionContext.create(context);
     const user: User = ctx.getContext().req.user;
 
@@ -17,7 +19,17 @@ export const CurrentUser = createParamDecorator(
       );
     }
 
-    // TODO: implement roles
+    if (roles.length === 0) {
+      return user;
+    }
+
+    const hasRole = roles.some((role) => user.role.includes(role));
+
+    if (!hasRole) {
+      throw new ForbiddenException(
+        'You do not have permission to access this resource',
+      );
+    }
 
     return user;
   },

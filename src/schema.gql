@@ -239,6 +239,11 @@ type Mutation {
   removeCategory(id: ID!): Category!
   createUser(createUserInput: SignupInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
+
+  """
+  Roles allowed: super-admin This mutation is used to update the role of a user
+  """
+  updateUserRole(updateInput: UpdateRoleInput!): User!
   removeUser(id: ID!): User!
   addUserFavorite(createUserFavoriteInput: CreateUserFavoriteInput!): UserFavorite!
   removeUserFavorite(id: ID!): Boolean!
@@ -384,6 +389,19 @@ input UpdateUserInput {
   """Last name of the user"""
   last_name: String
   id: ID!
+}
+
+input UpdateRoleInput {
+  id: ID!
+  roles: [ValidRoles!]!
+}
+
+"""Valid user roles"""
+enum ValidRoles {
+  admin
+  user
+  guest
+  superAdmin
 }
 
 input CreateUserFavoriteInput {

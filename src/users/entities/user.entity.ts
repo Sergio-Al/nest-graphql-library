@@ -50,7 +50,7 @@ export class User {
   @Field(() => [String], {
     description: 'Role of the user',
   })
-  role: string;
+  role: string[];
 
   @CreateDateColumn()
   @Field(() => GraphQLISODateTime, {
