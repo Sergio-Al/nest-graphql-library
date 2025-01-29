@@ -253,8 +253,14 @@ type Mutation {
 
   """Remove an author, requires a Admin Role"""
   removeAuthor(id: ID!): Author!
+
+  """Roles allowed: admin This mutation is used to create a new category"""
   createCategory(createCategoryInput: CreateCategoryInput!): Category!
+
+  """Roles allowed: admin This mutation is used to update a category"""
   updateCategory(updateCategoryInput: UpdateCategoryInput!): Category!
+
+  """Roles allowed: admin This mutation is used to remove a category"""
   removeCategory(id: ID!): Category!
   createUser(createUserInput: SignupInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
@@ -264,16 +270,38 @@ type Mutation {
   """
   updateUserRole(updateInput: UpdateRoleInput!): User!
   removeUser(id: ID!): User!
+
+  """Roles allowed: user This mutation is used to add a favorite"""
   addUserFavorite(createUserFavoriteInput: CreateUserFavoriteInput!): UserFavorite!
+
+  """Roles allowed: user This mutation is used to remove a favorite"""
   removeUserFavorite(id: ID!): Boolean!
+
+  """Roles allowed: user This mutation is used to create a new review"""
   createReview(createReviewInput: CreateReviewInput!): Review!
+
+  """Roles allowed: user This mutation is used to update a review"""
   updateReview(updateReviewInput: UpdateReviewInput!): Review!
+
+  """Roles allowed: user This mutation is used to remove a review"""
   removeReview(id: ID!): Review!
+
+  """Roles allowed: user This mutation is used to create a new order"""
   createOrder(createOrderInput: CreateOrderInput!): Order!
+
+  """Roles allowed: user This mutation is used to update an order"""
   updateOrder(updateOrderInput: UpdateOrderInput!): Order!
+
+  """Roles allowed: user This mutation is used to remove an order"""
   removeOrder(id: ID!): Order!
+
+  """Roles allowed: user This mutation is used to create a new order item"""
   createOrderItem(createOrderItemInput: CreateOrderItemInput!): OrderItem!
+
+  """Roles allowed: user This mutation is used to update an order item"""
   updateOrderItem(updateOrderItemInput: UpdateOrderItemInput!): OrderItem!
+
+  """Roles allowed: user This mutation is used to remove an order item"""
   removeOrderItem(id: ID!): OrderItem!
   signup(signupInput: SignupInput!): AuthResponse!
   login(loginInput: LoginInput!): AuthResponse!

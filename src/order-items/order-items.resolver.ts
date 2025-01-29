@@ -5,15 +5,22 @@ import { CreateOrderItemInput } from './dto/create-order-item.input';
 import { UpdateOrderItemInput } from './dto/update-order-item.input';
 import { ParseUUIDPipe, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
+import { ValidRoles } from 'src/auth/enums/valid-roles.enum';
+import { User } from 'src/users/entities/user.entity';
 
 @Resolver(() => OrderItem)
 @UseGuards(JwtAuthGuard)
 export class OrderItemsResolver {
   constructor(private readonly orderItemsService: OrderItemsService) {}
 
-  @Mutation(() => OrderItem)
+  @Mutation(() => OrderItem, {
+    name: 'createOrderItem',
+    description: `Roles allowed: ${ValidRoles.user} This mutation is used to create a new order item`,
+  })
   createOrderItem(
     @Args('createOrderItemInput') createOrderItemInput: CreateOrderItemInput,
+    @CurrentUser([ValidRoles.user]) user: User,
   ) {
     return this.orderItemsService.create(createOrderItemInput);
   }
@@ -28,9 +35,13 @@ export class OrderItemsResolver {
     return this.orderItemsService.findOne(id);
   }
 
-  @Mutation(() => OrderItem)
+  @Mutation(() => OrderItem, {
+    name: 'updateOrderItem',
+    description: `Roles allowed: ${ValidRoles.user} This mutation is used to update an order item`,
+  })
   updateOrderItem(
     @Args('updateOrderItemInput') updateOrderItemInput: UpdateOrderItemInput,
+    @CurrentUser([ValidRoles.user]) user: User,
   ) {
     return this.orderItemsService.update(
       updateOrderItemInput.id,
@@ -38,8 +49,14 @@ export class OrderItemsResolver {
     );
   }
 
-  @Mutation(() => OrderItem)
-  removeOrderItem(@Args('id', { type: () => ID }, ParseUUIDPipe) id: string) {
+  @Mutation(() => OrderItem, {
+    name: 'removeOrderItem',
+    description: `Roles allowed: ${ValidRoles.user} This mutation is used to remove an order item`,
+  })
+  removeOrderItem(
+    @Args('id', { type: () => ID }, ParseUUIDPipe) id: string,
+    @CurrentUser([ValidRoles.user]) user: User,
+  ) {
     return this.orderItemsService.remove(id);
   }
 }
