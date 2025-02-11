@@ -96,8 +96,16 @@ type User {
   """Last name of the user"""
   last_name: String!
 
-  """Role of the user"""
-  role: [String!]!
+  """
+  Available roles:
+    • user (default)
+    • admin
+    • guest
+    • super-admin
+  
+    Users can have multiple roles.
+  """
+  role: [ValidRoles!]!
 
   """Date when the user was created"""
   created_at: DateTime!
@@ -114,6 +122,14 @@ type User {
   """List of user orders"""
   orders: [Order!]!
   totalUsers: Float!
+}
+
+"""Valid user roles"""
+enum ValidRoles {
+  admin
+  user
+  guest
+  superAdmin
 }
 
 type Order {
@@ -441,14 +457,6 @@ input UpdateUserInput {
 input UpdateRoleInput {
   id: ID!
   roles: [ValidRoles!]!
-}
-
-"""Valid user roles"""
-enum ValidRoles {
-  admin
-  user
-  guest
-  superAdmin
 }
 
 input CreateUserFavoriteInput {

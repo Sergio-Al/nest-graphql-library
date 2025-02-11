@@ -5,6 +5,7 @@ import {
   ID,
   GraphQLISODateTime,
 } from '@nestjs/graphql';
+import { ValidRoles } from 'src/auth/enums/valid-roles.enum';
 import { Order } from 'src/orders/entities/order.entity';
 import { Review } from 'src/reviews/entities/review.entity';
 import { UserFavorite } from 'src/user-favorites/entities/user-favorite.entity';
@@ -47,10 +48,16 @@ export class User {
   last_name: string;
 
   @Column({ type: 'text', array: true, default: ['user'] })
-  @Field(() => [String], {
-    description: 'Role of the user',
+  @Field(() => [ValidRoles], {
+    description: `Available roles:
+  • user (default)
+  • admin
+  • guest
+  • super-admin
+
+  Users can have multiple roles.`,
   })
-  role: string[];
+  role: ValidRoles[];
 
   @CreateDateColumn()
   @Field(() => GraphQLISODateTime, {
